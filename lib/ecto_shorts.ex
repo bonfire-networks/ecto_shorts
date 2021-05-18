@@ -59,4 +59,9 @@ defmodule EctoShorts do
     error_module: EctoShorts.Actions.Error
   ```
   """
+
+  def filter(module_or_query, filters, order_by_prop \\ :id) do
+    EctoShorts.CommonFilters.convert_params_to_filter(module_or_query, filters, order_by_prop)
+  end
+
 end

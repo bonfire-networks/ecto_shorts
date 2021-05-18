@@ -5,8 +5,7 @@ defmodule EctoShorts.QueryBuilder.Schema do
   to filter on any natural field
   """
 
-
-  import Logger, only: [debug: 1]
+  import Logger, only: [debug: 1, error: 1]
 
   import Ecto.Query, only: [where: 3]
 
@@ -15,34 +14,34 @@ defmodule EctoShorts.QueryBuilder.Schema do
   @behaviour QueryBuilder
 
   @impl QueryBuilder
-  def create_schema_filter({filter_field, val}, query) do
-    create_schema_filter(
+  def filter({filter_field, val}, query) do
+    filter(
       {filter_field, val},
       QueryBuilder.query_schema(query),
       query
     )
   end
 
-  def create_schema_filter({filter_field, val}, schema, query) do
+  def filter({filter_field, val}, schema, query) do
     if filter_field in schema.__schema__(:fields) do
       create_schema_field_filter(query, filter_field, val)
     else
-      debug "create_schema_filter: #{Atom.to_string(filter_field)} is not a field for #{schema.__schema__(:source)} where filter"
+      error "EctoShorts.filter: `#{Atom.to_string(filter_field)}` is not a recognised filter or field for `#{schema.__schema__(:source)}` where you attempted to filter by: #{inspect val}"
 
       query
     end
   end
 
   defp create_schema_field_filter(query, filter_field, val) when is_list(val) do
-    where(query, [scm], field(scm, ^filter_field) in ^val)
+    query |> where([r], field(r, ^filter_field) in ^val)
   end
 
   defp create_schema_field_filter(query, filter_field, %NaiveDateTime{} = val) do
-    where(query, [scm], field(scm, ^filter_field) == ^val)
+    query |> where([r], field(r, ^filter_field) == ^val)
   end
 
   defp create_schema_field_filter(query, filter_field, %DateTime{} = val) do
-    where(query, [scm], field(scm, ^filter_field) == ^val)
+    query |> where([r], field(r, ^filter_field) == ^val)
   end
 
   defp create_schema_field_filter(query, filter_field, filters) when is_map(filters) do
@@ -52,42 +51,42 @@ defmodule EctoShorts.QueryBuilder.Schema do
   end
 
   defp create_schema_field_filter(query, filter_field, val) do
-    where(query, [scm], field(scm, ^filter_field) == ^val)
+    query |> where([r], field(r, ^filter_field) == ^val)
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :==, nil) do
-    where(query, [scm], is_nil(field(scm, ^filter_field)))
+    query |> where([r], is_nil(field(r, ^filter_field)))
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :!=, nil) do
-    where(query, [scm], not is_nil(field(scm, ^filter_field)))
+    query |> where([r], not is_nil(field(r, ^filter_field)))
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :gt, val) do
-    where(query, [scm], field(scm, ^filter_field) > ^val)
+    query |> where([r], field(r, ^filter_field) > ^val)
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :lt, val) do
-    where(query, [scm], field(scm, ^filter_field) < ^val)
+    query |> where([r], field(r, ^filter_field) < ^val)
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :gte, val) do
-    where(query, [scm], field(scm, ^filter_field) >= ^val)
+    query |> where([r], field(r, ^filter_field) >= ^val)
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :lte, val) do
-    where(query, [scm], field(scm, ^filter_field) <= ^val)
+    query |> where([r], field(r, ^filter_field) <= ^val)
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :like, val) do
     search_query = "%#{val}%"
 
-    where(query, [scm], like(field(scm, ^filter_field), ^search_query))
+    query |> where([r], like(field(r, ^filter_field), ^search_query))
   end
 
   defp create_schema_field_comparison_filter(query, filter_field, :ilike, val) do
     search_query = "%#{val}%"
 
-    where(query, [scm], ilike(field(scm, ^filter_field), ^search_query))
+    query |> where([r], ilike(field(r, ^filter_field), ^search_query))
   end
 end

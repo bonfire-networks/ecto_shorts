@@ -25,41 +25,42 @@ defmodule EctoShorts.QueryBuilder.Common do
     :last,
     :limit,
     :offset,
-    :search
+    :search,
+    :join_preload
   ]
 
   @spec filters :: list(atom)
   def filters, do: @filters
 
   @impl QueryBuilder
-  def create_schema_filter({:preload, val}, query), do: preload(query, ^val)
+  def filter({:preload, val}, query), do: preload(query, ^val)
 
   @impl QueryBuilder
-  def create_schema_filter({:start_date, val}, query), do: where(query, [m], m.inserted_at >= ^(val))
+  def filter({:start_date, val}, query), do: where(query, [m], m.inserted_at >= ^(val))
 
   @impl QueryBuilder
-  def create_schema_filter({:end_date, val}, query), do: where(query, [m], m.inserted_at <= ^val)
+  def filter({:end_date, val}, query), do: where(query, [m], m.inserted_at <= ^val)
 
   @impl QueryBuilder
-  def create_schema_filter({:before, id}, query), do: where(query, [m], m.id < ^id)
+  def filter({:before, id}, query), do: where(query, [m], m.id < ^id)
 
   @impl QueryBuilder
-  def create_schema_filter({:after, id}, query), do: where(query, [m], m.id > ^id)
+  def filter({:after, id}, query), do: where(query, [m], m.id > ^id)
 
   @impl QueryBuilder
-  def create_schema_filter({:ids, ids}, query), do: where(query, [m], m.id in ^ids)
+  def filter({:ids, ids}, query), do: where(query, [m], m.id in ^ids)
 
   @impl QueryBuilder
-  def create_schema_filter({:offset, val}, query), do: offset(query, ^val)
+  def filter({:offset, val}, query), do: offset(query, ^val)
 
   @impl QueryBuilder
-  def create_schema_filter({:limit, val}, query), do: limit(query, ^val)
+  def filter({:limit, val}, query), do: limit(query, ^val)
 
   @impl QueryBuilder
-  def create_schema_filter({:first, val}, query), do: limit(query, ^val)
+  def filter({:first, val}, query), do: limit(query, ^val)
 
   @impl QueryBuilder
-  def create_schema_filter({:last, val}, query) do
+  def filter({:last, val}, query) do
     query
       |> exclude(:order_by)
       |> from(order_by: [desc: :inserted_at], limit: ^val)
@@ -68,15 +69,28 @@ defmodule EctoShorts.QueryBuilder.Common do
   end
 
   @impl QueryBuilder
-  def create_schema_filter({:search, val}, query) do
+  def filter({:search, val}, query) do
     schema = QueryBuilder.query_schema(query)
 
     if Kernel.function_exported?(schema, :by_search, 2) do
       schema.by_search(query, val)
     else
-      debug "create_schema_filter: #{inspect schema} doesn't define &search_by/2 (query, params)"
+      debug "filter: #{inspect schema} doesn't define &search_by/2 (query, params)"
 
       query
     end
   end
+
+  @impl QueryBuilder
+  def filter({:join_preload, associations}, query) when is_list(associations) do
+    if Code.ensure_loaded?(EctoSparkles.JoinPreload) do
+      require EctoSparkles.JoinPreload
+      EctoSparkles.JoinPreload.join_preload(query, associations)
+    else
+      debug "Cannot run `join_preload`. Preloader module not found."
+
+      query
+    end
+  end
+
 end

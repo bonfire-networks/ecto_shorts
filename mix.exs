@@ -4,8 +4,8 @@ defmodule EctoShorts.MixProject do
   def project do
     [
       app: :ecto_shorts,
-      version: "0.1.7",
-      elixir: "~> 1.7",
+      version: "0.1.8-bonfire.1",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: "Helper tools for making ecto interactions more pleasant and shorter",
@@ -25,7 +25,8 @@ defmodule EctoShorts.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.3"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:ecto_sparkles, "https://github.com/bonfire-networks/ecto_sparkles", optional: true}
     ]
   end
 
