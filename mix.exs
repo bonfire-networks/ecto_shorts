@@ -8,7 +8,7 @@ defmodule EctoShorts.MixProject do
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      description: "Helper tools for making ecto interactions more pleasant and shorter",
+      description: "Helpers to make writing ecto queries more pleasant and the code shorter",
       docs: docs(),
       package: package()
     ]
@@ -32,7 +32,7 @@ defmodule EctoShorts.MixProject do
 
   defp package do
     [
-      maintainers: ["Mika Kalathil"],
+      maintainers: ["Bonfire", "Mika Kalathil"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/MikaAK/ecto_shorts"},
       files: ~w(mix.exs README.md CHANGELOG.md lib)

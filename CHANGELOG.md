@@ -1,5 +1,11 @@
 ## Changelog
 
+#### V0.1.8-bonfire.1
+
+- Removed non-query related modules such as Actions, CommonChanges and SchemaHelpers
+- Added support for passing ecto dynamic filters
+- Added support for passing functions to use as filter
+
 #### V0.1.5
 - Add `find_or_create` for Actions
 
