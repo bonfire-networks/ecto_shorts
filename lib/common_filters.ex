@@ -17,22 +17,27 @@ defmodule EctoShorts.CommonFilters do
     queryable :: Ecto.Query.t(),
     params :: Keyword.t | map
   ) :: Ecto.Query.t
-  def query_params(query, params, order_by_prop \\ :id)
+  def query_params(query, params, order_by_prop \\ :id, order_direction \\ :desc)
 
-  def query_params(query, params, _) when params === %{}, do: query
-  def query_params(query, params, order_by_prop) when is_map(params), do: query_params(query, Map.to_list(params), order_by_prop)
+  def query_params(query, params, _, _) when params === %{}, do: query
+  def query_params(query, params, order_by_prop, order_direction) when is_map(params), do: query_params(query, Map.to_list(params), order_by_prop, order_direction)
 
+  def query_params(query, params, order_by_prop, :desc) when is_atom(order_by_prop) do
+    params
+      |> ensure_last_is_final_filter
+      |> Enum.reduce(order_by(query, desc: ^order_by_prop), &filter/2)
+  end
 
-  def query_params(query, params, nil) do
+  def query_params(query, params, order_by_prop, :asc) when is_atom(order_by_prop) do
+    params
+      |> ensure_last_is_final_filter
+      |> Enum.reduce(order_by(query, asc: ^order_by_prop), &filter/2)
+  end
+
+  def query_params(query, params, _, _) do
     params
       |> ensure_last_is_final_filter
       |> Enum.reduce(query, &filter/2)
-  end
-
-  def query_params(query, params, order_by_prop) do
-    params
-      |> ensure_last_is_final_filter
-      |> Enum.reduce(order_by(query, ^order_by_prop), &filter/2)
   end
 
   def filter({filter, _} = filter_tuple, query) when filter in @common_filters do

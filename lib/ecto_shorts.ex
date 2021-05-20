@@ -36,8 +36,8 @@ defmodule EctoShorts do
   ```
   """
 
-  def filter(module_or_query, filters, order_by_prop \\ :id) do
-    EctoShorts.CommonFilters.query_params(module_or_query, filters, order_by_prop)
+  def filter(module_or_query, filters, order_by_prop \\ :id, order_direction \\ :desc) do
+    EctoShorts.CommonFilters.query_params(module_or_query, filters, order_by_prop, order_direction)
   end
 
 end
