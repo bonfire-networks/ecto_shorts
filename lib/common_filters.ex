@@ -19,8 +19,13 @@ defmodule EctoShorts.CommonFilters do
   ) :: Ecto.Query.t
   def query_params(query, params, order_by_prop \\ :id, order_direction \\ :desc)
 
-  def query_params(query, params, _, _) when params === %{}, do: query
   def query_params(query, params, order_by_prop, order_direction) when is_map(params), do: query_params(query, Map.to_list(params), order_by_prop, order_direction)
+
+  def query_params(query, params, order_by_prop, order_direction) when is_tuple(params), do: query_params(query, [params], order_by_prop, order_direction)
+
+  # def query_params(query, params, order_by_prop, order_direction) when not is_list(params), do: query_params(query, Enum.to_list(params), order_by_prop, order_direction)
+
+  def query_params(query, [], _, _), do: query
 
   def query_params(query, params, order_by_prop, :desc) when is_atom(order_by_prop) do
     params
@@ -41,6 +46,7 @@ defmodule EctoShorts.CommonFilters do
   end
 
   def filter({filter, _} = filter_tuple, query) when filter in @common_filters do
+    # IO.inspect(filter_tuple: filter_tuple)
     QueryBuilder.filter(QueryBuilder.Common, filter_tuple, query)
   end
 
@@ -64,7 +70,8 @@ defmodule EctoShorts.CommonFilters do
     QueryBuilder.filter(QueryBuilder.Schema, filter_tuple, query)
   end
 
-  defp ensure_last_is_final_filter(params) do
+  defp ensure_last_is_final_filter(params) when is_list(params) do # what's this for?
+    # IO.inspect(params)
     if Keyword.has_key?(params, :last) do
       params
         |> Keyword.delete(:last)
@@ -73,4 +80,7 @@ defmodule EctoShorts.CommonFilters do
       params
     end
   end
+
+  defp ensure_last_is_final_filter(params), do: params
+
 end

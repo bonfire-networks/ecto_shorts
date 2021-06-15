@@ -20,6 +20,7 @@ defmodule EctoShorts.QueryBuilder.Common do
     :end_date,
     :before,
     :after,
+    :id,
     :ids,
     :first,
     :last,
@@ -48,7 +49,13 @@ defmodule EctoShorts.QueryBuilder.Common do
   def filter({:after, id}, query), do: where(query, [m], m.id > ^id)
 
   @impl QueryBuilder
-  def filter({:ids, ids}, query), do: where(query, [m], m.id in ^ids)
+  def filter({:ids, ids}, query) when is_list(ids), do: where(query, [m], m.id in ^ids)
+
+  @impl QueryBuilder
+  def filter({:ids, id}, query), do: where(query, [m], m.id == ^id)
+
+  @impl QueryBuilder
+  def filter({:id, id}, query), do: where(query, [m], m.id == ^id)
 
   @impl QueryBuilder
   def filter({:offset, val}, query), do: offset(query, ^val)
