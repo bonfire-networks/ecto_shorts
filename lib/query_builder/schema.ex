@@ -7,7 +7,7 @@ defmodule EctoShorts.QueryBuilder.Schema do
 
   import Logger, only: [debug: 1, error: 1]
 
-  import Ecto.Query, only: [where: 3]
+  import Ecto.Query
 
   alias EctoShorts.QueryBuilder
 
