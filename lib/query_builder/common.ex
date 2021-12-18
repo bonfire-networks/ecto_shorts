@@ -33,40 +33,28 @@ defmodule EctoShorts.QueryBuilder.Common do
   @spec filters :: list(atom)
   def filters, do: @filters
 
-  @impl QueryBuilder
   def filter({:preload, val}, query), do: preload(query, ^val)
 
-  @impl QueryBuilder
   def filter({:start_date, val}, query), do: where(query, [m], m.inserted_at >= ^(val))
 
-  @impl QueryBuilder
   def filter({:end_date, val}, query), do: where(query, [m], m.inserted_at <= ^val)
 
-  @impl QueryBuilder
   def filter({:before, id}, query), do: where(query, [m], m.id < ^id)
 
-  @impl QueryBuilder
   def filter({:after, id}, query), do: where(query, [m], m.id > ^id)
 
-  @impl QueryBuilder
   def filter({:ids, ids}, query) when is_list(ids), do: where(query, [m], m.id in ^ids)
 
-  @impl QueryBuilder
   def filter({:ids, id}, query), do: where(query, [m], m.id == ^id)
 
-  @impl QueryBuilder
   def filter({:id, id}, query), do: where(query, [m], m.id == ^id)
 
-  @impl QueryBuilder
   def filter({:offset, val}, query), do: offset(query, ^val)
 
-  @impl QueryBuilder
   def filter({:limit, val}, query), do: limit(query, ^val)
 
-  @impl QueryBuilder
   def filter({:first, val}, query), do: limit(query, ^val)
 
-  @impl QueryBuilder
   def filter({:last, val}, query) do
     query
       |> exclude(:order_by)
@@ -75,7 +63,6 @@ defmodule EctoShorts.QueryBuilder.Common do
       |> order_by(:id)
   end
 
-  @impl QueryBuilder
   def filter({:search, val}, query) do
     schema = QueryBuilder.query_schema(query)
 
@@ -88,16 +75,13 @@ defmodule EctoShorts.QueryBuilder.Common do
     end
   end
 
-  @impl QueryBuilder
-  def filter({:join_preload, associations}, query) when is_list(associations) do
-    if Code.ensure_loaded?(EctoSparkles.JoinPreload) do
-      require EctoSparkles.JoinPreload
-      EctoSparkles.JoinPreload.join_preload(query, associations)
-    else
-      debug "Cannot run `join_preload`. Preloader module not found."
-
-      query
-    end
-  end
+  # def filter({:join_preload, associations}, query) when is_list(associations) do
+  #   if Code.ensure_loaded?(EctoSparkles) do
+  #     require EctoSparkles
+  #     EctoSparkles.join_preload(query, associations)
+  #   else
+  #     raise RuntimeError, message: "EctoSparkles not found"
+  #   end
+  # end
 
 end
