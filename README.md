@@ -1,5 +1,7 @@
 # EctoShorts
 
+## WARNING: functionality moved to ecto_sparkles library
+
 Helpers to make writing ecto queries more pleasant and the code shorter
 
 ### Usage
