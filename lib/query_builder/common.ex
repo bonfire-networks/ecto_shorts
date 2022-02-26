@@ -88,16 +88,4 @@ defmodule EctoShorts.QueryBuilder.Common do
     end
   end
 
-  @impl QueryBuilder
-  def filter({:join_preload, associations}, query) when is_list(associations) do
-    if Code.ensure_loaded?(EctoSparkles.JoinPreload) do
-      require EctoSparkles.JoinPreload
-      EctoSparkles.JoinPreload.join_preload(query, associations)
-    else
-      debug "Cannot run `join_preload`. Preloader module not found."
-
-      query
-    end
-  end
-
 end

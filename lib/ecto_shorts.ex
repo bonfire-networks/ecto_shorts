@@ -16,7 +16,6 @@ defmodule EctoShorts do
   - `limit` - Gets the first n items
   - `offset` - Offsets limit by n items
   - `search` - ***Warning:*** This requires schemas using this to have a `&by_search(query, val)` function
-  - `join_preload` - WIP: Joins an associations and preloads its fields onto the query results (using only one query)
 
   You are also able to filter on any natural field of a model, as well as use
 
