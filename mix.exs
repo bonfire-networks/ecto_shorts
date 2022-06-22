@@ -20,7 +20,7 @@ defmodule EctoShorts.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sql, "~> 3.3"},
+      {:ecto_sql, "~> 3.8"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
