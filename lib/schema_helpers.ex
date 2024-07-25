@@ -9,11 +9,11 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.schema?(create_schema())
+      iex> SchemaHelpers.schema?(create_schema())
     true
-    iex> SchemaHelpers.schema?(%{some_map: 1})
+      iex> SchemaHelpers.schema?(%{some_map: 1})
     false
-    iex> SchemaHelpers.schema?([create_schema()])
+      iex> SchemaHelpers.schema?([create_schema()])
     false
   """
   def schema?(%{__meta__: %{schema: _}}), do: true
@@ -25,9 +25,9 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.has_schemas?([%{some_map: 1}, create_schema()])
+      iex> SchemaHelpers.has_schemas?([%{some_map: 1}, create_schema()])
     true
-    iex> SchemaHelpers.has_schemas?([%{some_map: 1}])
+      iex> SchemaHelpers.has_schemas?([%{some_map: 1}])
     false
   """
   def has_schemas?(items), do: Enum.any?(items, &schema?/1)
@@ -38,9 +38,9 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.all_schemas([%{some_map: 1}, create_schema()])
+      iex> SchemaHelpers.all_schemas([%{some_map: 1}, create_schema()])
     false
-    iex> SchemaHelpers.all_schemas([create_schema(), create_schema()])
+      iex> SchemaHelpers.all_schemas([create_schema(), create_schema()])
     true
   """
   def all_schemas?(items), do: Enum.all?(items, &schema?/1)
@@ -51,11 +51,11 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.created?(%{id: 2})
+      iex> SchemaHelpers.created?(%{id: 2})
     true
-    iex> SchemaHelpers.created?(%{"id" => 2})
+      iex> SchemaHelpers.created?(%{"id" => 2})
     true
-    iex> SchemaHelpers.created?(%{item: 3})
+      iex> SchemaHelpers.created?(%{item: 3})
     false
   """
   def created?(%{id: _}), do: true
@@ -68,9 +68,9 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.all_created?([%{id: 2}, %{"id" => 5}])
+      iex> SchemaHelpers.all_created?([%{id: 2}, %{"id" => 5}])
     true
-    iex> SchemaHelpers.all_created?([%{"id" => 2}, %{item: 3}])
+      iex> SchemaHelpers.all_created?([%{"id" => 2}, %{item: 3}])
     false
   """
   def all_created?(items), do: Enum.all?(items, &created?/1)
@@ -81,11 +81,11 @@ defmodule EctoShorts.SchemaHelpers do
 
   ## Example
 
-    iex> SchemaHelpers.any_created?([%{id: 2}, %{"id" => 5}])
+      iex> SchemaHelpers.any_created?([%{id: 2}, %{"id" => 5}])
     true
-    iex> SchemaHelpers.any_created?([%{"id" => 2}, %{item: 3}])
+      iex> SchemaHelpers.any_created?([%{"id" => 2}, %{item: 3}])
     true
-    iex> SchemaHelpers.any_created?([%{test: 3}, %{item: 3}])
+      iex> SchemaHelpers.any_created?([%{test: 3}, %{item: 3}])
     false
   """
   def any_created?(items), do: Enum.any?(items, &created?/1)

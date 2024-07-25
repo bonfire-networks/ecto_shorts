@@ -83,8 +83,8 @@ defmodule EctoShorts.Actions do
 
   ## Examples
 
-    iex> Enum.each(1..4, fn _ -> create_user() end)
-    iex> length(EctoSchemas.Actions.all(EctoSchemas.Accounts.User, first: 3, repo: MyApp.MyRepoModule.Repo)) === 3
+      iex> Enum.each(1..4, fn _ -> create_user() end)
+      iex> length(EctoSchemas.Actions.all(EctoSchemas.Accounts.User, first: 3, repo: MyApp.MyRepoModule.Repo)) === 3
     true
   """
   @spec all(queryable :: query, params :: filter_params, opts :: Keyword.t) :: schema_list
@@ -440,8 +440,8 @@ defmodule EctoShorts.Actions do
     * `:replica` - If you don't want to perform any reads against your Primary, you can specify a replica to read from.
 
   ## Examples
-    iex> {:ok, records} = EctoSchemas.Actions.find_or_create_many(EctoSchemas.Accounts.User, [%{name: "foo"}, %{name: "bar}])
-    iex> length(records) === 2
+      iex> {:ok, records} = EctoSchemas.Actions.find_or_create_many(EctoSchemas.Accounts.User, [%{name: "foo"}, %{name: "bar}])
+      iex> length(records) === 2
   """
   @spec find_or_create_many(
     Ecto.Schema.t(),
