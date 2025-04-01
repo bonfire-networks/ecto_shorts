@@ -3,6 +3,6 @@
 import Config
 config :ecto_shorts, repo: nil, error_module: EctoShorts.Actions.Error
 
-if Mix.env() == :test do
+if config_env() == :test do
   config :ecto_shorts, repo: EctoShorts.Support.TestRepo
 end
